@@ -1,0 +1,35 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="turbo_code_web:war exploded">
+    <output-path>$PROJECT_DIR$/target/turbo_code_web-1.0-SNAPSHOT</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>turbo_code_web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="turbo_code_web" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.ejml:ejml-all:0.38" />
+          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:3.0.2" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-core:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-fdense:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-ddense:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-cdense:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-zdense:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-dsparse:0.38" />
+          <element id="library" level="project" name="Maven: org.ejml:ejml-simple:0.38" />
+          <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/turbo_code_web-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="turbo_code_web/web/Web" />
+    </root>
+  </artifact>
+</component>
