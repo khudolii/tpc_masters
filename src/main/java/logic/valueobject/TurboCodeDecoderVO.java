@@ -1,4 +1,4 @@
-package logic;
+package logic.valueobject;
 
 
 import java.util.List;

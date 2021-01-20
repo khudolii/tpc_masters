@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title alert alert-success">INPUT MATRIX</h4>
-                        <form action="getReport" method="POST">
+                        <form action="getDecoding" method="POST">
                             <%
                                 for (int i = 0; i < DecodeUtil.INPUT_DATA_MATRIX.numRows(); i++) {
                                     if (i == 0) {

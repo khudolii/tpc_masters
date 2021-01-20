@@ -1,4 +1,7 @@
-package logic;
+package logic.delegate;
+
+import logic.DecodeUtil;
+import logic.TurboCodeDecoder;
 
 public class TransportDelegate {
     public static void main(String[] args) {
