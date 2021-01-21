@@ -1,5 +1,6 @@
 package logic;
 
+import org.apache.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.ArrayList;
@@ -7,9 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DecodeUtil {
+    private static final Logger log = Logger.getLogger(TurboCodeDecoder.class);
 
-    public static Integer CORRECT_VALUE = 7;
-    public static Integer NUM_OF_ITERATIONS = 6;
+    public static final Integer CV = 10;
     private static final double[][] CHECK_MATRIX_VALUE = {
             {0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1},
             {0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0},
@@ -28,51 +29,32 @@ public class DecodeUtil {
             {1, 1, 1}
     };
 
-/*    private static final  double[][] INPUT_DATA = {
-            {-7, 7, 7, -7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -1, 7},
-            {7, -7, 7, 7, 7, -2, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            //{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            {7, 7, -7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            {1, 7, 7, -7, 7, 7, -4, 7, 7, 7, -1, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, -7, 7, 2, -3, 7, 7, 7, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, -6, 7, 7, 7},
-            {7, -1, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, 4, 7, 7},
-            {7, 7, 7, -1, 7, 7, 3, -7, 7, 7, -2, 7, 7, -4, 7, 5},
-            {7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, -7, 7, -4, 7, 7, -7, 7, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, 7, -3, 7},
-            {7, 7, 7, -6, 7, 7, 7, -7, 7, -1, 7, -7, 7, 7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, -2},
-            {7, 7, 7, 7, 7, 7, -3, 7, 7, 7, 7, 7, 7, -7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, -2, 7, 7, 7, 7, -7, 7},
-            {7, 7, -2, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -7}
-    };*/
-
-    private static final double[][] INPUT_DATA = {
-            {8, 2, 1, -6, 2, 1, 3, 4, 8, 1, 2, 3, 7, 2, -1, 6},
-            {7, -7, 7, 7, 7, -2, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            //{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            {7, 7, -7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-            {1, 7, 7, -7, 7, 7, -4, 7, 7, 7, -1, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, -7, 7, 2, -3, 7, 4, 7, 7, 7, 2, 7, 7},
-            {7, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, -6, 7, 7, 7},
-            {7, -1, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, 4, 7, 7},
-            {7, 7, 7, -1, 7, 7, 3, -7, 7, 7, -2, 7, 7, -4, 7, 5},
-            {7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, -7, 7, -4, 7, 7, -7, 7, 7, 7, 7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, 7, -3, 7},
-            {7, 7, 7, -6, 7, 7, 3, -7, 7, -1, 7, -7, 7, 7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, -7, 7, 7, -2},
-            {7, 7, 7, 7, 7, 7, -3, 7, 7, 7, 7, 7, 7, -7, 7, 7},
-            {7, 7, 7, 7, 7, 7, 7, 7, 7, -2, 7, 7, 7, 7, -7, 7},
-            {7, 7, -2, 7, 7, 7, 7, 5, 7, 7, 7, 7, 5, 7, 7, -7}
+    public static final double[][] INPUT_DATA = {
+            {8, 2, 1, -6, 2, 1, 3, 4, 8, 1, 2, 3, CV, 2, -1, 6},
+            {CV, -CV, CV, CV, CV, -2, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, -CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {1, CV, CV, -CV, CV, CV, -4, CV, CV, CV, -1, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, -CV, CV, 2, -3, CV, 4, CV, CV, CV, 2, CV, CV},
+            {CV, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, -6, CV, CV, CV},
+            {CV, -1, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, 4, CV, CV},
+            {CV, CV, CV, -1, CV, CV, 3, -CV, CV, CV, -2, CV, CV, -4, CV, 5},
+            {CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, -CV, CV, -4, CV, CV, -CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, CV, -3, CV},
+            {CV, CV, CV, -6, CV, CV, 3, -CV, CV, -1, CV, -CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, -2},
+            {CV, CV, CV, CV, CV, CV, -3, CV, CV, CV, CV, CV, CV, -CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, -2, CV, CV, CV, CV, -CV, CV},
+            {CV, CV, -2, CV, CV, CV, CV, 5, CV, CV, CV, CV, 5, CV, CV, -CV}
     };
 
     public static final SimpleMatrix CHECK_MATRIX = new SimpleMatrix(CHECK_MATRIX_VALUE);
     public static final SimpleMatrix TRANSPOSE_CHECK_MATRIX = CHECK_MATRIX.transpose();
-    public static final SimpleMatrix INPUT_DATA_MATRIX = new SimpleMatrix(INPUT_DATA);
+    public static SimpleMatrix INPUT_DATA_MATRIX = new SimpleMatrix(INPUT_DATA);
+    public static SimpleMatrix OUTPUT_MATRIX;
 
     public static boolean isAllElementsInListZero(List<?> list, Class typeOfList) {
+        log.info("Сhecking the vector for the fact that all elements are equal to zero.");
         if (typeOfList != String.class) {
             return list.stream().allMatch(_e -> _e.equals(0));
         } else {
@@ -116,6 +98,7 @@ public class DecodeUtil {
     }
 
     static List<Integer> generateSindromVector(List<Integer> vectorForSindrom) {
+        log.info("Start generate sindrom for vector: " + Arrays.toString(vectorForSindrom.toArray()));
         List<Integer> sindromVector = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
         for (int i = 0; i < DecodeUtil.CHECK_MATRIX.numRows(); i++) {
             Integer parity = 0;
@@ -124,6 +107,7 @@ public class DecodeUtil {
             }
             sindromVector.set(i, parity);
         }
+        log.info("Found sindrom vector: " + Arrays.toString(sindromVector.toArray()));
         return sindromVector;
     }
 
@@ -143,7 +127,7 @@ public class DecodeUtil {
         boolean isAllMatrixValueCorrect = true;
         for (int i = 0; i < matrix.numRows(); i++) {
             for (int j = 0; j < matrix.numCols(); j++) {
-                if (matrix.get(i, j) != DecodeUtil.CORRECT_VALUE) {
+                if (matrix.get(i, j) != DecodeUtil.CV) {
                     isAllMatrixValueCorrect = false;
                 }
             }
@@ -151,7 +135,4 @@ public class DecodeUtil {
         return isAllMatrixValueCorrect;
     }
 
-    public static void main(String[] args) {
-        System.out.println("DecodeUtil.INPUT_DATA_MATRIX.getNumElements() = " + DecodeUtil.INPUT_DATA_MATRIX.getNumElements());
-    }
 }

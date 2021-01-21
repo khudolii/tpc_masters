@@ -1,5 +1,7 @@
 package logic;
 
+import logic.exceptions.DecoderException;
+
 public interface Decoder {
-    String toDecode();
+    TurboCodeDecoder toDecode() throws DecoderException;
 }

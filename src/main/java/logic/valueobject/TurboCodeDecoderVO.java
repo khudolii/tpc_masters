@@ -8,10 +8,12 @@ public class TurboCodeDecoderVO {
     private List<MinElementsVO> minValues;
     private List<Integer> hardDecisionVector; //inputVector
     private List<Integer> sindromVector;
+    private List<Integer> changesVectorByTest;
     private List<Integer> softOutputVector;
     private Integer halfIteration;
     private Integer rowNumber;
     public List<TestVectorVO> testVectorsList;
+
     public Boolean isAllElementsFromSindromZeroFlag;
 
     public Boolean isAllElementsFromSindromZero() {
@@ -121,6 +123,14 @@ public class TurboCodeDecoderVO {
         public Boolean getVectorZero() {
             return isVectorZero;
         }
+    }
+
+    public List<Integer> getChangesVectorByTest() {
+        return changesVectorByTest;
+    }
+
+    public void setChangesVectorByTest(List<Integer> changesVectorByTest) {
+        this.changesVectorByTest = changesVectorByTest;
     }
 
     public static class MinElementsVO {
