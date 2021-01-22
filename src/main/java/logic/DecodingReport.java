@@ -5,12 +5,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 import logic.beans.DecoderBean;
 import logic.exceptions.ReportException;
 import logic.valueobject.TurboCodeDecoderVO;
+import org.apache.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 public class DecodingReport {
+
+    private static final Logger log = Logger.getLogger(DecodingReport.class);
+
     private static Font anchorFont = new Font(Font.FontFamily.TIMES_ROMAN, 20,
             Font.BOLD);
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
@@ -25,21 +29,17 @@ public class DecodingReport {
             Font.BOLD);
     private static Font bold = new Font(Font.FontFamily.TIMES_ROMAN, 14,
             Font.BOLD);
+
     public static ByteArrayOutputStream bout;
-
-    public static ByteArrayOutputStream getBout() {
-        return bout;
-    }
-
     public static Document document = null;
     private static Anchor anchor;
-    private static Chapter catPart;
 
     public DecodingReport() {
     }
 
     public ByteArrayOutputStream createReportFile(DecoderBean decoderBean) throws ReportException {
         try {
+            log.info("Start to create report file");
             document = new Document();
             bout = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, bout);
@@ -68,8 +68,10 @@ public class DecodingReport {
                         if (halfIteration.isAllElementsFromSindromZero()) {
                             createNewSubAnchor("All elements from sindrom is zero.");
                         } else {
-                            createNewSubAnchor("Test vectors:");
-                            if (halfIteration.getTestVectorsList() != null) {
+                            if (halfIteration.isHaveSindromPositionToHardVector()) {
+                                createNewSubAnchor("Found sindrom position to hard decision vector.");
+                            } else if (halfIteration.getTestVectorsList() != null) {
+                                createNewSubAnchor("Test vectors:");
                                 for (TurboCodeDecoderVO.TestVectorVO testVector : halfIteration.getTestVectorsList()) {
                                     if (testVector != null) {
                                         createNewSubAnchorNotBold("Value vector: " + Arrays.toString(testVector.getValue().toArray()));
@@ -79,6 +81,8 @@ public class DecodingReport {
                                         createNewSubAnchorNotBold("________________________________________");
                                     }
                                 }
+                            } else {
+                                log.error("Test vectors is null: " + Arrays.toString(halfIteration.getSoftInputVector().toArray()));
                             }
                         }
                         createNewSubAnchor("Output vector (Soft Output vector):");
@@ -90,24 +94,28 @@ public class DecodingReport {
                 printMatrixArray(iteration.getMatrixAfterIteration());
             }
             document.close();
+            log.info("Report file created");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("createReportFile: " + e);
             throw new ReportException("createReportFile: " + e);
         }
         return bout;
     }
 
     private void createNewAnchor(String name) throws ReportException {
+        log.debug("Add new anchor: " + name);
         anchor = new Anchor(name + "\n", anchorFont);
         addAnchorToDocument(anchor);
     }
 
     private void createNewSubAnchor(String name) throws ReportException {
+        log.debug("Add new sub anchor: " + name);
         anchor = new Anchor(name + "\n", smallBold);
         addAnchorToDocument(anchor);
     }
 
     private void createNewSubAnchorNotBold(String name) throws ReportException {
+        log.debug("Add new sub anchor (not bold): " + name);
         anchor = new Anchor(name + "\n", greyFont);
         addAnchorToDocument(anchor);
     }
@@ -157,7 +165,7 @@ public class DecodingReport {
         try {
             document.add(anchor);
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error("addAnchorToDocument: " + "anchor: " + Arrays.toString(anchor.toArray()) + ", message: " + e);
             throw new ReportException("addAnchorToDocument: " + "anchor: " + Arrays.toString(anchor.toArray()) + ", message: " + e);
         }
     }

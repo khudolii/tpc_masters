@@ -12,7 +12,24 @@ public class TurboCodeDecoderVO {
     private List<Integer> softOutputVector;
     private Integer halfIteration;
     private Integer rowNumber;
-    public List<TestVectorVO> testVectorsList;
+    private List<TestVectorVO> testVectorsList;
+    private boolean isHaveSindromPositionToHardVector;
+
+    public boolean isHaveSindromPositionToHardVector() {
+        return isHaveSindromPositionToHardVector;
+    }
+
+    public void setHaveSindromPositionToHardVector(boolean haveSindromPositionToHardVector) {
+        isHaveSindromPositionToHardVector = haveSindromPositionToHardVector;
+    }
+
+    public Boolean getAllElementsFromSindromZeroFlag() {
+        return isAllElementsFromSindromZeroFlag;
+    }
+
+    public void setAllElementsFromSindromZeroFlag(Boolean allElementsFromSindromZeroFlag) {
+        isAllElementsFromSindromZeroFlag = allElementsFromSindromZeroFlag;
+    }
 
     public Boolean isAllElementsFromSindromZeroFlag;
 
@@ -123,6 +140,15 @@ public class TurboCodeDecoderVO {
         public Boolean getVectorZero() {
             return isVectorZero;
         }
+
+        @Override
+        public String toString() {
+            return "TestVectorVO{" +
+                    "value=" + value +
+                    ", sindromVector=" + sindromVector +
+                    ", isVectorZero=" + isVectorZero +
+                    '}';
+        }
     }
 
     public List<Integer> getChangesVectorByTest() {
@@ -148,6 +174,14 @@ public class TurboCodeDecoderVO {
         public MinElementsVO(Integer maxValue, Integer maxValueIndex) {
             this.maxValue = maxValue;
             this.maxValueIndex = maxValueIndex;
+        }
+
+        @Override
+        public String toString() {
+            return "MinElementsVO{" +
+                    "maxValue=" + maxValue +
+                    ", maxValueIndex=" + maxValueIndex +
+                    "} ";
         }
     }
 }
