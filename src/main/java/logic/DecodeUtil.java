@@ -65,7 +65,7 @@ public class DecodeUtil {
     static Integer calculateParity(Integer parity, Integer hardDecElement, Double checkMatrixElement) {
         log.debug("Start calculate parity");
         log.debug("oldParity:" + parity + "; hardDecElement:" + hardDecElement + " checkMatrixElement:" + checkMatrixElement);
-        Integer compareHardAndCheckElement = hardDecElement.equals(1) && checkMatrixElement.equals(1.) ? 1 : 0;
+        Integer compareHardAndCheckElement = hardDecElement ^ checkMatrixElement.intValue();
         parity = parity ^ compareHardAndCheckElement;
         log.debug("Calculated parity: " + parity);
         return parity;

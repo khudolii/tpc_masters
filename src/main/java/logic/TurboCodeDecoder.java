@@ -163,14 +163,14 @@ public class TurboCodeDecoder implements Decoder {
      * The method generates a vector of difficult decisions, if the value is less than 0,
      * then the value of the vector is set to 1, if it is greater than 0, then 0 is set.
      */
-    private List<Integer> generateHardDecisionVector(List<Integer> softInputVector) {
+    protected List<Integer> generateHardDecisionVector(List<Integer> softInputVector) {
         return softInputVector.stream().map(_e -> _e < 0 ? 1 : 0).collect(Collectors.toList());
     }
 
     /*
      * The method searches for the minimum values of the input vector by casting all elements modulo.
      */
-    private List<TurboCodeDecoderVO.MinElementsVO> getMinElementsValue(List<Integer> softInputVector) throws DecoderException {
+    protected List<TurboCodeDecoderVO.MinElementsVO> getMinElementsValue(List<Integer> softInputVector) throws DecoderException {
         try {
             log.info("Start to find 3 min elements in softInputVector.");
             List<Integer> mathAbsElements = softInputVector.stream().map(Math::abs).collect(Collectors.toList());
@@ -215,7 +215,7 @@ public class TurboCodeDecoder implements Decoder {
      * The method generates output vector by changing the incoming vector by +-count.
      * Then it makes a correction to the maximum correct value.
      */
-    private List<Integer> returnSoftOutputVector(List<Integer> resultVector, Integer count, Integer exceptionPosition) throws DecoderException {
+    protected List<Integer> returnSoftOutputVector(List<Integer> resultVector, Integer count, Integer exceptionPosition) throws DecoderException {
         List<Integer> transformedList = new ArrayList<>();
         log.info("Start to generate soft output vector:");
         log.debug("Exception position : " + exceptionPosition + ", change result vector on +-" + count);
@@ -257,7 +257,7 @@ public class TurboCodeDecoder implements Decoder {
         @param sindromForHardDecisionVector - this list included sindrom for hard decision vector
         @param softInputVector - this list included soft input vector
      */
-    private List<Integer> checkSindromOfHardDecisionVector(List<Integer> sindromForHardDecisionVector, List<Integer> softInputVector) throws DecoderException {
+    protected List<Integer> checkSindromOfHardDecisionVector(List<Integer> sindromForHardDecisionVector, List<Integer> softInputVector) throws DecoderException {
         log.info("Start to check sindrom of hard decision vector");
         Integer sindromPosition = DecodeUtil.findSindromPosition(sindromForHardDecisionVector);
         log.debug("sindromPosition: " + sindromPosition);
@@ -275,7 +275,7 @@ public class TurboCodeDecoder implements Decoder {
      * If the position of the syndrome is found, the signs of the incoming vector are changed by the value
      * of the test vector and the output vector is announced. If there is no syndrome position, the output vector is returned.
      */
-    private List<Integer> checkSindromForTestVectors(List<Integer> softInputVector,
+    protected List<Integer> checkSindromForTestVectors(List<Integer> softInputVector,
                                                      List<TurboCodeDecoderVO.TestVectorVO> testVectorsVOList) throws DecoderException {
         List<Integer> softOutputVector = null;
         try {
@@ -311,7 +311,7 @@ public class TurboCodeDecoder implements Decoder {
     /*
      * The method changes the sign of the incoming vector based on the position of the syndrome
      */
-    private List<Integer> toFixSoftInputVectorBySindromPosition(List<Integer> softInputVector, Integer sindromPosition) throws DecoderException {
+    protected List<Integer> toFixSoftInputVectorBySindromPosition(List<Integer> softInputVector, Integer sindromPosition) throws DecoderException {
         log.info("Start to fix soft input vector by sindrom position.");
         try {
             for (int i = 0; i < softInputVector.size(); i++) {
@@ -333,7 +333,7 @@ public class TurboCodeDecoder implements Decoder {
      * Get the value vector from the index of the minimum elements and all variants of the test vectors.
      * A syndrome is generated for each test vector.
      */
-    private List<TurboCodeDecoderVO.TestVectorVO> generateTestVectorsByHardDecisionVectorAndMinElementsInSoftInput(List<Integer> hardDecisionVector,
+    protected List<TurboCodeDecoderVO.TestVectorVO> generateTestVectorsByHardDecisionVectorAndMinElementsInSoftInput(List<Integer> hardDecisionVector,
                                                                                                                    List<TurboCodeDecoderVO.MinElementsVO> minElementsVOList) throws DecoderException {
         log.info("Start generate test vectors by hard decision vector:");
         List<TurboCodeDecoderVO.TestVectorVO> testVectorsVO = new ArrayList<>();
@@ -369,7 +369,7 @@ public class TurboCodeDecoder implements Decoder {
     /*
      * The method changes the sign of the incoming vector based on the value vector of the test vector
      */
-    private List<Integer> changeSignOfSoftInputVectorByTestVector(List<Integer> softInputVector, TurboCodeDecoderVO.TestVectorVO testVectorVO) throws DecoderException {
+    protected List<Integer> changeSignOfSoftInputVectorByTestVector(List<Integer> softInputVector, TurboCodeDecoderVO.TestVectorVO testVectorVO) throws DecoderException {
         List<Integer> changedDecodingRow = new ArrayList<>(softInputVector);
         log.info("Start to change sign of soft input vector by test vector.");
         try {
