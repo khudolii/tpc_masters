@@ -86,7 +86,7 @@ public class TurboCodeDecoder implements Decoder {
                 }
 
                 if (lastIteration == DECODED_DATA.numRows() - 1) {
-                    if (halfIterationNum < 50) {
+                    if (halfIterationNum < 100) {
                         if (halfIterationNum % 2 == 0) {
                             IterationHistory iterationHistory = new IterationHistory(iterationDecHistory, halfIterationNum / 2, new SimpleMatrix(DECODED_DATA));
                             iterationsHistory.add(iterationHistory);
@@ -230,14 +230,14 @@ public class TurboCodeDecoder implements Decoder {
                 }
             });
 
-            List<Integer> softOutputVector = new ArrayList<>();
+            List<Integer> softOutputVector = new ArrayList<>(transformedList);
             Integer value = DecodeUtil.CV;
             IntStream.range(0, transformedList.size()).forEach(i -> {
                 Integer element = transformedList.get(i);
-                if (element > 0) {
-                    softOutputVector.add(element >= value ? value : element);
-                } else if (element < 0) {
-                    softOutputVector.add(element <= -value ? -value : element);
+                if (element > value) {
+                    softOutputVector.set(i, value);
+                } else if (element < -value) {
+                    softOutputVector.set(i, -value);
                 }
             });
             log.info("Generated soft output vector: " + Arrays.toString(softOutputVector.toArray()));

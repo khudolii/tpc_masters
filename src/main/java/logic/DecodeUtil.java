@@ -32,22 +32,22 @@ public class DecodeUtil {
     };
 
     public static final double[][] INPUT_DATA = {
-            {8, 2, 1, -6, 2, 1, 3, 4, 8, 1, 2, 3, CV, 2, -1, 6},
-            {CV, -CV, CV, CV, CV, -2, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
-            {CV, CV, -CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
-            {1, CV, CV, -CV, CV, CV, -4, CV, CV, CV, -1, CV, CV, CV, CV, CV},
-            {CV, CV, CV, CV, -CV, CV, 2, -3, CV, 4, CV, CV, CV, 2, CV, CV},
-            {CV, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, -6, CV, CV, CV},
-            {CV, -1, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, 4, CV, CV},
-            {CV, CV, CV, -1, CV, CV, 3, -CV, CV, CV, -2, CV, CV, -4, CV, 5},
-            {CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, CV, CV, CV, CV, CV},
-            {CV, CV, CV, CV, -CV, CV, -4, CV, CV, -CV, CV, CV, CV, CV, CV, CV},
-            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, CV, -3, CV},
-            {CV, CV, CV, -6, CV, CV, 3, -CV, CV, -1, CV, -CV, CV, CV, CV, CV},
-            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, -CV, CV, CV, -2},
-            {CV, CV, CV, CV, CV, CV, -3, CV, CV, CV, CV, CV, CV, -CV, CV, CV},
-            {CV, CV, CV, CV, CV, CV, CV, CV, CV, -2, CV, CV, CV, CV, -CV, CV},
-            {CV, CV, -2, CV, CV, CV, CV, 5, CV, CV, CV, CV, 5, CV, CV, -CV}
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
+            {CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV, CV},
     };
 
     public static final SimpleMatrix CHECK_MATRIX = new SimpleMatrix(CHECK_MATRIX_VALUE);
@@ -124,7 +124,7 @@ public class DecodeUtil {
         return sindromVector;
     }
 
-    public static SimpleMatrix setChangesForMatrix(SimpleMatrix matrix, List<Integer> changesValue, Integer numOfRow) {
+    public synchronized static SimpleMatrix setChangesForMatrix(SimpleMatrix matrix, List<Integer> changesValue, Integer numOfRow) {
         log.info("Start to set changes to matrix in row#: " + numOfRow + " values: " + Arrays.toString(changesValue.toArray()));
         for (int i = 0; i < matrix.numRows(); i++) {
             if (i == numOfRow) {
@@ -149,4 +149,11 @@ public class DecodeUtil {
         return isAllMatrixValueCorrect;
     }
 
+    public static int sign(int x) {
+        if (x > 0)
+            return 1;
+        else if (x < 0)
+            return -1;
+        return 0;
+    }
 }

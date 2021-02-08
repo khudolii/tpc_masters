@@ -6,10 +6,11 @@ import org.ejml.simple.SimpleMatrix;
 import java.util.List;
 
 public class DecoderBean {
+    private double probability;
     private String isErrorOccurred;
     private String dateOfDecoding;
     private Integer numOfIterations;
-    List<TurboCodeDecoder.IterationHistory> iterationsHistory;
+    private List<TurboCodeDecoder.IterationHistory> iterationsHistory;
 
     public String getErrorOccurred() {
         return isErrorOccurred;
@@ -43,14 +44,22 @@ public class DecoderBean {
         this.iterationsHistory = iterationsHistory;
     }
 
-    private double[][] INPUT_DATA;
+    private SimpleMatrix INPUT_DATA;
     private SimpleMatrix OUTPUT_DATA;
 
-    public double[][] getINPUT_DATA() {
+    public String getIsErrorOccurred() {
+        return isErrorOccurred;
+    }
+
+    public void setIsErrorOccurred(String isErrorOccurred) {
+        this.isErrorOccurred = isErrorOccurred;
+    }
+
+    public SimpleMatrix getINPUT_DATA() {
         return INPUT_DATA;
     }
 
-    public void setINPUT_DATA(double[][] INPUT_DATA) {
+    public void setINPUT_DATA(SimpleMatrix INPUT_DATA) {
         this.INPUT_DATA = INPUT_DATA;
     }
 
@@ -60,5 +69,13 @@ public class DecoderBean {
 
     public void setOUTPUT_DATA(SimpleMatrix OUTPUT_DATA) {
         this.OUTPUT_DATA = OUTPUT_DATA;
+    }
+
+    public double getProbability() {
+        return probability;
+    }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
     }
 }

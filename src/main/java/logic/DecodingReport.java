@@ -48,6 +48,7 @@ public class DecodingReport {
             article.add(new Paragraph("TURBO CODE DECODING REPORT", anchorFont));
             article.add(new Paragraph("Date Of Decoding: " + decoderBean.getDateOfDecoding(), smallBold));
             article.add(new Paragraph("Num Of Iterations: " + decoderBean.getNumOfIterations(), smallBold));
+            article.add(new Paragraph("Error probability: " + decoderBean.getProbability(), smallBold));
             document.add(article);
 
             createNewAnchor("Input Data");

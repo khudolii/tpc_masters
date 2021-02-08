@@ -39,17 +39,21 @@ public class TurboCodeServlet extends HttpServlet {
             if (actionName == null) {
                 if (decoderBean == null) {
                     decoderBean = new DecoderBean();
-                    decoderBean.setINPUT_DATA(DecodeUtil.INPUT_DATA);
                     log.info("actionName: null; decoderBean: null; set to new decoderBean constant input data");
                 }
             } else if (actionName.equals("startDecoding")) {
                 log.info("Action Name = startDecoding. Start ->");
                 decoderBean = new DecoderBean();
-                double[][] inputData = handleMatrix(req);
-                decoderBean.setINPUT_DATA(inputData);
+                String probability = req.getParameter("probability");
+                if (probability != null) {
+                    decoderBean.setProbability(Double.parseDouble(probability));
                 TransportDelegate transportDelegate = new TransportDelegate();
                 transportDelegate.startDecodingProcess(decoderBean);
+                } else {
+                    throw new ServletException("Not correct probability value");
+                }
             } else if (actionName.equals("deleteOutputMatrix")) {
+                decoderBean.setINPUT_DATA(null);
                 decoderBean.setOUTPUT_DATA(null);
                 log.info("Action Name = deleteOutputMatrix. Set to outputData - null");
             } else if (actionName.equals("getPdfReport")) {
@@ -68,12 +72,11 @@ public class TurboCodeServlet extends HttpServlet {
                     outputStream.flush();
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             decoderBean.setErrorOccurred(e.getMessage());
             resp.setStatus(404);
-        }
-        finally {
+        } finally {
             req.setAttribute("decoderBean", decoderBean);
             req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
